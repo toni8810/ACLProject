@@ -1,6 +1,5 @@
 package acl.test.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.acls.AclPermissionCacheOptimizer;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.*;
@@ -25,16 +23,27 @@ import javax.sql.DataSource;
 /**
  * Created by toni8810 on 14/07/17.
  */
+//Enabling PreAuthorize and PostAuthorize.... annotations
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ACLConfig {
 
-
+/*    Creating AclCache bean
+    Dependency needed:
+    	<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>Latest Version</version>
+		</dependency>*/
     @Bean
     public EhCacheBasedAclCache aclCache() {
         return new EhCacheBasedAclCache(aclEhCacheFactoryBean().getObject(), permissionGrantingStrategy(), aclAuthorizationStrategy());
     }
-
+/*    Dependency needed:
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>*/
     @Bean
     public EhCacheFactoryBean aclEhCacheFactoryBean() {
         EhCacheFactoryBean ehCacheFactoryBean = new EhCacheFactoryBean();
@@ -48,12 +57,21 @@ public class ACLConfig {
         return new EhCacheManagerFactoryBean();
     }
 
+/*    Dependency needed:
+        <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-acl</artifactId>
+			<version>4.2.3.RELEASE</version>
+		</dependency>*/
     @Bean
     public DefaultPermissionGrantingStrategy permissionGrantingStrategy() {
         ConsoleAuditLogger consoleAuditLogger = new ConsoleAuditLogger();
         return new DefaultPermissionGrantingStrategy(consoleAuditLogger);
     }
-
+/*    The 3 roles defined here:
+        role 1: authority needed to change ownership
+        role 2: authority needed to modify auditing details
+        role 3: authority needed to change other ACL and ACE details */
     @Bean
     public AclAuthorizationStrategy aclAuthorizationStrategy() {
         return new AclAuthorizationStrategyImpl(
@@ -91,13 +109,6 @@ public class ACLConfig {
         securityExpressionHandler.setPermissionEvaluator(new AclPermissionEvaluator(aclService()));
         securityExpressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
         return securityExpressionHandler;
-    }
-    @Bean
-    public RoleHierarchyImpl roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER" +
-                "ROLE_USER > ROLE_VISITOR");
-        return roleHierarchy;
     }
 
 }

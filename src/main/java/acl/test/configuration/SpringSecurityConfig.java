@@ -17,16 +17,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
-                .and().authorizeRequests().antMatchers("/personal/**").hasAnyRole("ROLE_ADMIN","ROLE_USER")
-                .and().authorizeRequests().antMatchers("/public/**").hasAnyRole("ROLE_ADMIN","ROLE_USER","ROLE_VISITOR")
+                .authorizeRequests().antMatchers("/distributor/**").hasRole("DISTRIBUTOR")
+                .and().authorizeRequests().antMatchers("/farmer/**").hasAnyRole("DISTRIBUTOR","FARMER")
+                .and().authorizeRequests().antMatchers("/farm/**").hasAnyRole("DISTRIBUTOR","FARMER")
                 .and().httpBasic();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("john").password("password").roles("ADMIN", "USER", "VISITOR");
-        auth.inMemoryAuthentication().withUser("jane").password("password").roles("USER", "VISITOR");
-        auth.inMemoryAuthentication().withUser("mike").password("password").roles("VISITOR");
+        auth.inMemoryAuthentication().withUser("john").password("password").roles("DISTRIBUTOR");
+        auth.inMemoryAuthentication().withUser("jane").password("password").roles("FARMER");
+        auth.inMemoryAuthentication().withUser("mike").password("password").roles("DISTRIBUTOR");
+        auth.inMemoryAuthentication().withUser("james").password("password").roles("FARMER");
     }
 }
