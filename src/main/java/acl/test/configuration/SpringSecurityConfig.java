@@ -16,15 +16,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .anyRequest().authenticated()
+        http.csrf().disable()
+                .authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
+                .and().authorizeRequests().antMatchers("/personal/**").hasAnyRole("ROLE_ADMIN","ROLE_USER")
+                .and().authorizeRequests().antMatchers("/public/**").hasAnyRole("ROLE_ADMIN","ROLE_USER","ROLE_VISITOR")
                 .and().httpBasic();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("John").password("password").roles("ADMIN, USER, VISITOR");
-        auth.inMemoryAuthentication().withUser("Jane").password("password").roles("USER, VISITOR");
-        auth.inMemoryAuthentication().withUser("Mike").password("password").roles("VISITOR");
+        auth.inMemoryAuthentication().withUser("john").password("password").roles("ADMIN", "USER", "VISITOR");
+        auth.inMemoryAuthentication().withUser("jane").password("password").roles("USER", "VISITOR");
+        auth.inMemoryAuthentication().withUser("mike").password("password").roles("VISITOR");
     }
 }

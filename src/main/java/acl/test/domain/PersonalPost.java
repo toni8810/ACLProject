@@ -1,12 +1,16 @@
 package acl.test.domain;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by toni8810 on 14/07/17.
  */
-public class PersonalPost {
-
+@Entity
+@Table(name = "personal_post")
+public class PersonalPost implements Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
      private Long id;
      private Date date;
      private String message;

@@ -1,12 +1,18 @@
 package acl.test.domain;
 
+
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by toni8810 on 14/07/17.
  */
-public class AdminPost {
-     private Long id;
+@Entity
+@Table(name = "admin_post")
+public class AdminPost implements Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
      private Date date;
      private String message;
 

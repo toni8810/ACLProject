@@ -1,11 +1,12 @@
 package acl.test.configuration;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -18,6 +19,8 @@ import org.springframework.security.acls.jdbc.LookupStrategy;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.sql.DataSource;
+
 
 /**
  * Created by toni8810 on 14/07/17.
@@ -26,8 +29,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ACLConfig {
 
-    @Autowired
-    DataSource dataSource;
 
     @Bean
     public EhCacheBasedAclCache aclCache() {
@@ -63,26 +64,33 @@ public class ACLConfig {
 
     @Bean
     public LookupStrategy lookupStrategy() {
-        return new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
+        return new BasicLookupStrategy(dataSource(), aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
     }
 
     @Bean
     public JdbcMutableAclService aclService() {
-        JdbcMutableAclService service = new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
+        JdbcMutableAclService service = new JdbcMutableAclService(dataSource(), lookupStrategy(), aclCache());
         return service;
     }
 
     @Bean
-    public DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
-        return new DefaultMethodSecurityExpressionHandler();
+    @Primary
+    public DataSource dataSource() {
+        return DataSourceBuilder
+                .create()
+                .username("root")
+                .password("")
+                .url("jdbc:mysql://localhost:3306/acl")
+                .driverClassName("com.mysql.jdbc.Driver")
+                .build();
     }
 
     @Bean
     public MethodSecurityExpressionHandler createExpressionHandler() {
-        DefaultMethodSecurityExpressionHandler expressionHandler = defaultMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(new AclPermissionEvaluator(aclService()));
-        expressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
-        return expressionHandler;
+        DefaultMethodSecurityExpressionHandler securityExpressionHandler = new DefaultMethodSecurityExpressionHandler();
+        securityExpressionHandler.setPermissionEvaluator(new AclPermissionEvaluator(aclService()));
+        securityExpressionHandler.setPermissionCacheOptimizer(new AclPermissionCacheOptimizer(aclService()));
+        return securityExpressionHandler;
     }
     @Bean
     public RoleHierarchyImpl roleHierarchy() {
