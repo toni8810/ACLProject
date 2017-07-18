@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "farmer")
-public class Farmer {
+public class Farmer implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long farmerId;

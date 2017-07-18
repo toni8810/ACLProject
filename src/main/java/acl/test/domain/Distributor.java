@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "distributor")
-public class Distributor {
+public class Distributor implements User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
