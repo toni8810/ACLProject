@@ -1,0 +1,12 @@
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/domain/Distributor.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/repository/DistributorRepository.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/AcltestApplication.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/controller/GenericController.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/domain/Farmer.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/domain/User.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/repository/FarmerRepository.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/domain/Farm.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/controller/DistributorController.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/controller/FarmerController.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/configuration/ACLConfig.java
+/home/toni8810/IdeaProjects/ACLProject/src/main/java/acl/test/configuration/SpringSecurityConfig.java

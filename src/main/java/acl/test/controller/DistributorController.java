@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by toni8810 on 17/07/17.
  */
 @RestController()
-@RequestMapping("/distributor")
+@RequestMapping("/distributors")
 public class DistributorController extends GenericController<Distributor> {
 
 }

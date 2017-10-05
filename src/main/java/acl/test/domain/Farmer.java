@@ -1,6 +1,8 @@
 package acl.test.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "farmer")
-public class Farmer implements User {
+public class Farmer implements MyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long farmerId;
@@ -19,6 +21,7 @@ public class Farmer implements User {
     @JoinColumn(name = "id")
     private Distributor distributor;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "farmer")
     private List<Farm> farms = new ArrayList<>();
 

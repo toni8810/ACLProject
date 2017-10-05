@@ -1,0 +1,12 @@
+acl/test/repository/DistributorRepository.class
+acl/test/domain/User.class
+acl/test/configuration/SpringSecurityConfig.class
+acl/test/domain/Farm.class
+acl/test/domain/Farmer.class
+acl/test/repository/FarmerRepository.class
+acl/test/controller/FarmerController.class
+acl/test/controller/GenericController.class
+acl/test/AcltestApplication.class
+acl/test/domain/Distributor.class
+acl/test/controller/DistributorController.class
+acl/test/configuration/ACLConfig.class
