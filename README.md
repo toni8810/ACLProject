@@ -6,6 +6,12 @@
 
 3, The app will be running on http://localhost:8080
 
+# Run using Docker
+
+1, open up a terminal and run the following command
+
+<code>sudo docker run -d -p 8080:8080 109946/spring-acl-example-app:spring-acl</code>
+
 # How it works
 
 This project demonstrates the basic usage of Spring ACL.
